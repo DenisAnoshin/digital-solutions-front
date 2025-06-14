@@ -21,8 +21,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Create .env.production from secret
+        run: echo "${{ secrets.ENV_PRODUCTION }}" > .env.production
+
       - name: Build project
-        run: npm run build
+        run: npm run build -- --mode production
 
       - name: Deploy to Server via SSH
         uses: appleboy/scp-action@v0.1.5
