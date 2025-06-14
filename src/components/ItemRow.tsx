@@ -10,15 +10,27 @@ type Props = {
 
 const ItemRow = React.forwardRef<HTMLDivElement, Props>(
   ({ item, checked, onChange, draggableProps, dragHandleProps }, ref) => {
+    const checkboxId = `checkbox-${item}`;
+
     return (
       <div
         ref={ref}
         {...draggableProps}
         {...dragHandleProps}
-        className="flex items-center gap-4 bg-white shadow-sm hover:shadow-md transition p-2 mb-2 rounded"
+        className="d-flex align-items-center gap-3 bg-white shadow-sm p-3 mb-2 rounded border"
       >
-        <input type="checkbox" checked={checked} onChange={onChange} />
-        <span>{item}</span>
+        <div className="form-check m-0">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            checked={checked}
+            onChange={onChange}
+            id={checkboxId}
+          />
+          <label className="form-check-label" htmlFor={checkboxId}>
+            {item}
+          </label>
+        </div>
       </div>
     );
   }

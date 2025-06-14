@@ -1,6 +1,9 @@
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import useItems from '../hooks/useItems';
 import styles from './TablePage.module.css';
+import SearchBar from '../components/SearchBar';
+import Loader from '../components/Loader';
+import ItemRow from '../components/ItemRow';
 
 export default function TablePage() {
   const {
@@ -18,13 +21,7 @@ export default function TablePage() {
       <header className={styles.header}>
         <h2 className={styles.title}>Список элементов</h2>
         <div className={styles.searchWrapper}>
-          <input
-            type="text"
-            placeholder="Поиск"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className={styles.searchInput}
-          />
+          <SearchBar value={search} onChange={setSearch} />
         </div>
       </header>
 
@@ -37,9 +34,7 @@ export default function TablePage() {
                 {...provided.droppableProps}
                 className={styles.droppable}
               >
-                {items.length === 0 && (
-                  <div className={styles.loading}>⏳ Загрузка...</div>
-                )}
+                {items.length === 0 && <Loader />}
 
                 {items.map((item, index) => (
                   <Draggable
@@ -48,23 +43,14 @@ export default function TablePage() {
                     index={index}
                   >
                     {(provided) => (
-                      <div
+                      <ItemRow
                         ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className={styles.item}
-                        style={provided.draggableProps.style}
-                      >
-                        <label className={styles.itemLabel}>
-                          <input
-                            type="checkbox"
-                            checked={selected.has(item)}
-                            onChange={() => toggleSelect(item)}
-                            className={styles.checkbox}
-                          />
-                          {item}
-                        </label>
-                      </div>
+                        item={item}
+                        checked={selected.has(item)}
+                        onChange={() => toggleSelect(item)}
+                        draggableProps={provided.draggableProps}
+                        dragHandleProps={provided.dragHandleProps}
+                      />
                     )}
                   </Draggable>
                 ))}
